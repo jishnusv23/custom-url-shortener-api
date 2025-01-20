@@ -7,5 +7,8 @@ export const AppDataSource = new DataSource({
   url: process.env.DATABASE_URL,
   synchronize: true,
   logging: true,
-  entities:[User]
+  entities: [User],
+  ssl: {
+    rejectUnauthorized: false, 
+  },
 });

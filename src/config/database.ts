@@ -1,5 +1,5 @@
 import { DataSource } from "typeorm";
-import { User } from "../entities/User";
+import { User,ShortUrls } from "../entities";
 import { config } from "dotenv";
 config();
 export const AppDataSource = new DataSource({
@@ -7,8 +7,8 @@ export const AppDataSource = new DataSource({
   url: process.env.DATABASE_URL,
   synchronize: true,
   logging: true,
-  entities: [User],
+  entities: [User, ShortUrls],
   ssl: {
-    rejectUnauthorized: false, 
+    rejectUnauthorized: false,
   },
 });

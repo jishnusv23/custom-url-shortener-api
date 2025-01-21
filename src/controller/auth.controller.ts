@@ -1,5 +1,5 @@
 import express, { Request, Response, NextFunction } from "express";
-import { clearScreenDown } from "readline";
+
 import { AuthServices } from "../services/auth.service";
 
 export class AuthController {
@@ -32,7 +32,7 @@ export class AuthController {
       const authData = await this.authService.authenticateGoogle(
         id_toke as string
       );
-      //   console.log("🚀 ~ file: auth.controller.ts:33 ~ AuthController ~ googleAuth= ~ authData:", authData)
+        console.log("🚀 ~ file: auth.controller.ts:33 ~ AuthController ~ googleAuth= ~ authData:", authData)
       res.setHeader("authorization", `Bearer ${authData.token}`);
       res
         .status(201)

@@ -1,21 +1,20 @@
-import { Request, Response, NextFunction } from "express";
+import { NextFunction, Request, Response } from "express";
 import ErrorResponse from "./errorResponse";
-import { StatusCode } from "./HttpStatusCode ";
 
-const errorHandler = (
-  err: any,
+export const errorHandler = (
+  err: Error | ErrorResponse,
   req: Request,
   res: Response,
   next: NextFunction
-) => {
+): any => {
+  console.log(err);
   if (err instanceof ErrorResponse) {
-    res
+    return res
       .status(err.status)
-      .json({ success: false, message: err.message, status: err.status });
+      .json({ message: err.message, success: err.success });
+  } else {
+    return res
+      .status(500)
+      .json({ message: "Something went wrong", success: false });
   }
-
-  res.status(StatusCode.INTERNAL_SERVER_ERROR).json({ success: false ,status:StatusCode.INTERNAL_SERVER_ERROR,message:"Internal Server Error"});
 };
-
-
-export default errorHandler

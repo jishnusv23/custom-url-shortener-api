@@ -4,6 +4,7 @@ import { config } from "dotenv";
 import morgan from "morgan";
 import { AppDataSource } from "./config/database";
 import authRoutes from './routes/auth.routes'
+import errorHandler from "./utils/common/errorHandler";
 config();
 
 const app: Application = express();
@@ -13,6 +14,12 @@ app.use(morgan("dev"));
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);
+
+
+
+
+app.use(errorHandler)
+
 
 app.listen(PORT, async () => {
   console.log(`Server is running on port ${PORT} 👽`);

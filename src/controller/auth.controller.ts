@@ -1,6 +1,7 @@
 import express, { Request, Response, NextFunction } from "express";
 
 import { AuthServices } from "../services/auth.service";
+import { StatusCode } from "../utils/common/HttpStatusCode ";
 
 export class AuthController {
   private authService!: AuthServices;
@@ -14,7 +15,7 @@ export class AuthController {
       const authHeader = req.headers.authorization;
 
       if (!authHeader || !authHeader.startsWith("Bearer")) {
-        res.status(401).json({
+        res.status(StatusCode.UNAUTHORIZED).json({
           success: false,
           message: "Authorization header is missing ",
         });
@@ -26,7 +27,7 @@ export class AuthController {
       //   );
       if (!id_toke) {
         res
-          .status(401)
+          .status(StatusCode.UNAUTHORIZED)
           .json({ success: false, message: "Invalid token format " });
       }
       const authData = await this.authService.authenticateGoogle(
@@ -35,7 +36,7 @@ export class AuthController {
         console.log("🚀 ~ file: auth.controller.ts:33 ~ AuthController ~ googleAuth= ~ authData:", authData)
       res.setHeader("authorization", `Bearer ${authData.token}`);
       res
-        .status(201)
+        .status(StatusCode.CREATED)
         .json({ success: true, data: authData, message: "Successfull" });
     } catch (error) {
       next(error);
@@ -46,14 +47,14 @@ export class AuthController {
     try {
       const authHeader = req.headers.authorization;
       if (!authHeader || !authHeader.startsWith("Bearer")) {
-        res.status(401).json({
+        res.status(StatusCode.UNAUTHORIZED).json({
           success: false,
           message: "Authorization header is missing ",
         });
       }
       res.setHeader("authorization", "Bearer");
       res
-        .status(200)
+        .status(StatusCode.OK)
         .json({ success: true, data: "", message: " successfull" });
     } catch (error) {
       next(error);

@@ -30,6 +30,7 @@
     "nanoid": "^5.0.9",
     "pg": "^8.13.1",
     "rand-token": "^1.0.1",
+    "redis": "^4.7.0",
     "reflect-metadata": "^0.2.2",
     "typeorm": "^0.3.20"
   },

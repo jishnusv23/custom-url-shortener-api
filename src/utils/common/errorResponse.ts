@@ -1,3 +1,5 @@
+import { StatusCode } from "./HttpStatusCode ";
+
 export default class ErrorResponse extends Error {
   public status: number;
   public message: string;
@@ -11,25 +13,25 @@ export default class ErrorResponse extends Error {
   }
 
   static badRequest(msg: string): ErrorResponse {
-    return new ErrorResponse(400, msg || "Bad Request");
+    return new ErrorResponse(StatusCode.BAD_REQUEST, msg || "Bad Request");
   }
 
   static unauthorized(msg: string): ErrorResponse {
-    return new ErrorResponse(401, msg || "Unauthorized");
+    return new ErrorResponse(StatusCode.UNAUTHORIZED, msg || "Unauthorized");
   }
 
   static forbidden(msg: string): ErrorResponse {
-    return new ErrorResponse(403, msg || "Forbidden");
+    return new ErrorResponse(StatusCode.FORBIDDEN, msg || "Forbidden");
   }
 
   static notFound(msg: string): ErrorResponse {
-    return new ErrorResponse(404, msg || "Not Found");
+    return new ErrorResponse(StatusCode.NOT_FOUND, msg || "Not Found");
   }
   static conflict(msg: string): ErrorResponse {
-    return new ErrorResponse(409, msg || "Conflict");
+    return new ErrorResponse(StatusCode.CONFLICT, msg || "Conflict");
   }
 
   static internalError(msg: string): ErrorResponse {
-    return new ErrorResponse(500, msg || "internal Server Error");
+    return new ErrorResponse(StatusCode.CONFLICT, msg || "internal Server Error");
   }
 }

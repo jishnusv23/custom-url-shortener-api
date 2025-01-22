@@ -5,6 +5,7 @@ import morgan from "morgan";
 import { AppDataSource } from "./config/database";
 import authRoutes from "./routes/auth.routes";
 import urlRoutes from "./routes/url.routes";
+import analyticsRoutes from './routes/analytics.routes'
 import { errorHandler } from "./utils/common/errorHandler";
 import { connectRedis } from "./config/redis";
 
@@ -20,6 +21,7 @@ app.use(express.json());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/url", urlRoutes);
+app.use("/api/analytics", analyticsRoutes);
 
 
 app.use(errorHandler);

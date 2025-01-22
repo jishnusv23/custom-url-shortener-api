@@ -15,9 +15,12 @@ export class ShortUrls {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
 
+  @Column()
+  userId!: string;
+
   @ManyToOne(() => User, { onDelete: "CASCADE" })
   @JoinColumn({ name: "userId" })
-  userId!: User;
+  user!: User;
 
   @Column({ type: "varchar", length: 255, unique: true })
   alias!: string;

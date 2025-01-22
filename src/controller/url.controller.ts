@@ -2,11 +2,17 @@ import express, { Request, Response, NextFunction } from "express";
 import { UrlServices } from "../services/url.service";
 import ErrorResponse from "../utils/common/errorResponse";
 import { StatusCode } from "../utils/common/HttpStatusCode ";
+import { ShortUrls, User } from "../entities";
+import { AnalyticsServices } from "../services/analytics.service";
+import { VisitData } from "../utils/Type";
+import { ObjectId } from "typeorm";
 
 export class UrlController {
   private urlservices!: UrlServices;
+   private analyticasservices!:AnalyticsServices
   constructor() {
     this.urlservices = new UrlServices();
+    this.analyticasservices=new AnalyticsServices()
   }
   createShorturl = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -48,15 +54,30 @@ export class UrlController {
 
   redirectUrl = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      console.log(req.params, "params");
+      // console.log(req.params, "params");
       const { alias } = req.params;
-      const url = await this.urlservices.getAndTrackUrl(alias);
+      if (!alias) throw ErrorResponse.badRequest("alias is missing ");
+
+      const url = await this.urlservices.getAndTrackUrl(alias) as ShortUrls
+
       console.log("🚀 ~ file: url.controller.ts:54 ~ UrlController ~ redirectUrl= ~ url:", url)
-      if (!url) {
+
+      if (!url.longUrl) {
         throw ErrorResponse.notFound("URL not found");
       }
-      res.redirect(url)
+       const params: VisitData = {
+         shortUrl_id: url.id,
+         userAgent: req.headers["user-agent"] as string,
+         ipAddress: req.headers["x-forwarded-for"] || req.socket.remoteAddress,
+         timestamp: new Date(),
+         userId: url.userId.toString(),
+       };
+       
+       await this.analyticasservices.createanalystics(params);
+      res.redirect(url.longUrl);
       // res.status(200).json({data:url})
-    } catch (error) {}
+    } catch (error) {
+      next(error)
+    }
   };
 }

@@ -10,18 +10,24 @@ import { ShortUrls } from "./Url";
 import { User } from "./User";
 
 @Entity("analytics")
-@Index("shortUrlUserIndex", ["shortUrlId", "userId"]) // composite index 
+@Index("shortUrlUserIndex", ["shortUrlId", "userId"]) // composite index
 export class Analytics {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
 
+  @Column()
+  shortUrlId!: string;
+
   @ManyToOne(() => ShortUrls, { onDelete: "CASCADE" })
   @JoinColumn({ name: "shortUrlId" })
-  shortUrlId!: ShortUrls; 
+  shortUrl!: ShortUrls;
+
+  @Column()
+  userId!: string;
 
   @ManyToOne(() => User, { onDelete: "CASCADE" })
   @JoinColumn({ name: "userId" })
-  userId!: User;
+  user!: User;
 
   @Column({ type: "varchar", length: 255 })
   device!: string;
@@ -33,9 +39,8 @@ export class Analytics {
   userAgent!: string;
 
   @Column({ type: "varchar", length: 255 })
-  ipAddress!:string;
+  ipAddress!: string;
 
- @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
- timestamp!: Date;
-
+  @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
+  timestamp!: Date;
 }

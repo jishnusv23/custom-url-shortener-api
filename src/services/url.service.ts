@@ -26,14 +26,12 @@ export class UrlServices {
     } catch (err) {
       throw ErrorResponse.badRequest("Invalid URl Provided");
     }
+    
     if (data.customAlias) {
       const exsistingAlias = await this.urlRepository.findOne({
         where: { alias: data.customAlias },
       });
-      console.log(
-        "🚀 ~ file: url.service.ts:33 ~ UrlServices ~ exsistingAlias:",
-        exsistingAlias
-      );
+      
       if (exsistingAlias) {
         throw ErrorResponse.conflict("alias already taken");
       }
@@ -42,10 +40,7 @@ export class UrlServices {
     const exsistingUrl = await this.urlRepository.findOne({
       where: { longUrl: data.longUrl, userId: Equal(data.userId) },
     });
-    console.log(
-      "🚀 ~ file: url.service.ts:42 ~ UrlServices ~ exsistingUrl:",
-      exsistingUrl
-    );
+    
     if (exsistingUrl) {
       return exsistingUrl;
     }
@@ -58,9 +53,11 @@ export class UrlServices {
     const url = this.urlRepository.create({
       longUrl: data.longUrl,
       alias,
-      userId: { id: data.userId } as User,
+      userId: data.userId, 
+      user: { id: data.userId } as User, 
       topic,
     });
+
     console.log("🚀 ~ file: url.service.ts:55 ~ UrlServices ~ url:", url);
 
     await this.urlRepository.save(url);
@@ -72,14 +69,20 @@ export class UrlServices {
 
      console.log(alias, "alias");
      const cachedUrl = await redisClient.get(`url:${alias}`);
-     if (cachedUrl) return cachedUrl;
-
+     console.log("🚀 ~ file: url.service.ts:78 ~ UrlServices ~ getAndTrackUrl ~ cachedUrl:", cachedUrl)
+     if (cachedUrl) {
+           const url = await this.urlRepository.findOne({ where: { alias } });
+           console.log("🚀 ~ file: url.service.ts:77 ~ UrlServices ~ getAndTrackUrl ~ url:", url)
+           return url
+   
+     }
      const url = await this.urlRepository.findOne({ where: { alias } });
+     console.log("🚀 ~ file: url.service.ts:85 ~ UrlServices ~ getAndTrackUrl ~ url:", url)
      if (url) {
        await redisClient.setEx(`url:${alias}`, 3600, url.longUrl);
        url.totalClick += 1;
        await this.urlRepository.save(url);
-       return url.longUrl;
+       return url
      }
      return null
    }catch(err:any){

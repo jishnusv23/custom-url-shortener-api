@@ -6,7 +6,7 @@ const router=Router()
 const urlcontroller=new UrlController()
 
 router.post("/shorten",authMiddleware,urlcontroller.createShorturl);
-router.get("/shorten/:alias", urlcontroller.redirectUrl);
+router.get("/shorten/:alias", authMiddleware,urlcontroller.redirectUrl);
 
 
 export default router

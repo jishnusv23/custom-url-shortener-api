@@ -56,6 +56,7 @@ export class UrlController {
         throw ErrorResponse.notFound("URL not found");
       }
       res.redirect(url)
+      // res.status(200).json({data:url})
     } catch (error) {}
   };
 }

@@ -25,7 +25,8 @@ export default class ErrorResponse extends Error {
   }
 
   static notFound(msg: string): ErrorResponse {
-    return new ErrorResponse(StatusCode.NOT_FOUND, msg || "Not Found");
+ 
+    throw new ErrorResponse(StatusCode.NOT_FOUND, msg || "Not Found");
   }
   static conflict(msg: string): ErrorResponse {
     return new ErrorResponse(StatusCode.CONFLICT, msg || "Conflict");

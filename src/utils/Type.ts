@@ -19,3 +19,16 @@ export interface VisitData {
   device?: string;
   os?: string;
 }
+export interface OsTypeAnalytics {
+  [osName: string]: {
+    uniqueClicks: number;
+    uniqueUsers: number;
+  };
+}
+
+ export interface DeviceTypeAnalytics {
+  [deviceName: string]: {
+    uniqueClicks: number;
+    uniqueUsers: number;
+  };
+}

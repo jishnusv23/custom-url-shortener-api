@@ -9,6 +9,7 @@ export const errorHandler = (
 ): any => {
   console.log(err);
   if (err instanceof ErrorResponse) {
+    console.log(err.message,'message',err.stack)
     return res
       .status(err.status)
       .json({ message: err.message, success: err.success });
@@ -17,4 +18,5 @@ export const errorHandler = (
       .status(500)
       .json({ message: "Something went wrong", success: false });
   }
+  
 };

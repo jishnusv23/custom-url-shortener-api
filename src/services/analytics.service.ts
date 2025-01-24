@@ -17,22 +17,17 @@ export class AnalyticsServices {
     this.helperMethods = new HelperMethods(AppDataSource);
   }
   async createanalystics(visitData: VisitData) {
-    console.log(visitData, "visitdata");
+  
     const parse = new UAParser(visitData.userAgent);
-    const os = parse.getOS();
-    const device = parse.getDevice();
+    // const os = parse.getOS();
+    // const device = parse.getDevice();
 
-    console.log("OS:", os.name, os.version);
-    console.log("Device:", device.vendor, device.model, device.type);
 
     const { name: osName = "Unknown" } = parse.getOS() || {};
     const { type: deviceType = "Unknown" } = parse.getDevice() || {};
 
     const geo = geoip.lookup(visitData.ipAddress);
-    console.log(
-      "🚀 ~ file: analytics.service.ts:30 ~ AnalyticsServices ~ createanalystics ~ geo:",
-      geo
-    );
+   
 
     const analytics = this.analyticsRepository.create({
       userAgent: visitData.userAgent,
@@ -44,11 +39,7 @@ export class AnalyticsServices {
       user: { id: visitData.userId } as User,
       shortUrl: { id: visitData.shortUrl_id } as ShortUrls,
     });
-    // console.log(
-    //   "🚀 ~ file: analytics.service.ts:31 ~ AnalyticsServices ~ createanalystics ~ analytics:",
-    //   analytics
-    // );
-
+   
     await this.analyticsRepository.save(analytics);
     return analytics;
   }
@@ -58,10 +49,7 @@ export class AnalyticsServices {
       const Url = await this.shortUrlRepository.findOne({
         where: { alias: alias },
       });
-      // console.log(
-      //   "🚀 ~ file: analytics.service.ts:38 ~ AnalyticsServices ~ getAnalyticsByAlias ~ Url:",
-      //   Url
-      // );
+      
       if (!Url) {
         throw ErrorResponse.notFound("alias not found ");
       }
@@ -70,7 +58,7 @@ export class AnalyticsServices {
         where: { shortUrlId: Url.id },
       });
 
-      // const deviceType = this.helperMethods.getDeviceType(analyticData);
+      
       const { totalClicks, uniqueUsers } = await this.helperMethods.totalStats(
         Url.id
       );
@@ -80,7 +68,7 @@ export class AnalyticsServices {
       const deviceTypeAnalytics = await this.helperMethods.deviceTypeAnalytics(
         Url.id
       );
-      // console.log(clicksByDate,osTypeAnalytics,deviceTypeAnalytics,'kkoooooo')
+      
 
       return {
         alias,
@@ -110,8 +98,8 @@ export class AnalyticsServices {
       const Urls = await this.shortUrlRepository.find({
         where: { topic: topic as UrlTopics },
       });
-      console.log(Urls, "data from url ");
-
+      // console.log("🚀 ~ file: analytics.service.ts:113 ~ AnalyticsServices ~ TopicBasedAnalytics ~ Urls:", Urls)
+    
       const urlAnalytics = await Promise.all(
         Urls.map(async (url) => {
           const { totalClicks, uniqueUsers } =

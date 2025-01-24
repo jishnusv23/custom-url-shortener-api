@@ -21,10 +21,7 @@ export class AuthController {
         });
       }
       const id_toke = authHeader?.split(" ")[1];
-      //   console.log(
-      //     "🚀 ~ file: auth.controller.ts:21 ~ AuthController ~ googleAuth= ~ id_toke:",
-      //     id_toke
-      //   );
+     
       if (!id_toke) {
         res
           .status(StatusCode.UNAUTHORIZED)
@@ -33,7 +30,7 @@ export class AuthController {
       const authData = await this.authService.authenticateGoogle(
         id_toke as string
       );
-        console.log("🚀 ~ file: auth.controller.ts:33 ~ AuthController ~ googleAuth= ~ authData:", authData)
+
       res.setHeader("authorization", `Bearer ${authData.token}`);
       res
         .status(StatusCode.CREATED)

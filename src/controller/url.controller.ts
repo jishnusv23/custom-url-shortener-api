@@ -54,13 +54,13 @@ export class UrlController {
 
   redirectUrl = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      // console.log(req.params, "params");
+     
       const { alias } = req.params;
       if (!alias) throw ErrorResponse.badRequest("alias is missing ");
 
       const url = await this.urlservices.getAndTrackUrl(alias) as ShortUrls
 
-      console.log("🚀 ~ file: url.controller.ts:54 ~ UrlController ~ redirectUrl= ~ url:", url)
+      
 
       if (!url.longUrl) {
         throw ErrorResponse.notFound("URL not found");
